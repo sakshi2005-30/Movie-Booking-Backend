@@ -3,7 +3,9 @@ const app=express();
 const dotenv=require("dotenv");
 dotenv.config();
 const mongoose=require("mongoose");
-
+const movieRoutes=require("./routes/movie.routes")
+app.use(express.json());
+movieRoutes(app);
 
 
 const PORT=process.env.PORT;
