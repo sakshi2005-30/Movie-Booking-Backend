@@ -5,8 +5,13 @@ const movieService=require("../services/movie.service");
 const {errorResponseBody,successResponseBody}=require("../utils/responseBody")
 const createMovie=async(req,res)=>{
     try{
-        const movie=await movieService.createMovie(req.body);
-        successResponseBody.data=movie;
+        const response=await movieService.createMovie(req.body);
+        if(response.err){
+            errorResponseBody.err=response.err;
+            errorResponseBody.message="Validation failed on few parameters of the request body";
+            return res.status(response.code).json(errorResponseBody);
+        }
+        successResponseBody.data=response;
         successResponseBody.message="Successfully created the movie"
         res.status(201).json(successResponseBody)
     }
@@ -46,4 +51,22 @@ const getMovie=async(req,res)=>{
         return res.status(500).json(errorResponseBody)
     }
 }
-module.exports={createMovie,deleteMovie,getMovie};
+const updateMovie=async(req,res)=>{
+    try {
+      const response = await movieService.updateMovie(req.params.id,req.body);
+      if (response.err) {
+        errorResponseBody.err = response.err;
+        errorResponseBody.message =
+          "The movie we want to update doesn't follow the schema rules";
+        return res.status(response.code).json(errorResponseBody);
+      }
+      successResponseBody.data = response;
+      successResponseBody.message = "Successfully updated the movie";
+      res.status(201).json(successResponseBody);
+    } catch (err) {
+      console.log(err);
+      errorResponseBody.error = err;
+      res.status(500).json(errorResponseBody);
+    }
+}
+module.exports={createMovie,deleteMovie,getMovie,updateMovie};
