@@ -1,6 +1,13 @@
 const { getMovie } = require("../controllers/movie.controller");
 const Movie=require("../models/movie.model");
-
+const createMovie=async(data)=>{
+    const movie=await Movie.create(data);
+    return movie;
+}
+const deleteMovie=async(id)=>{
+    const response=await Movie.findByIdAndDelete(id);
+    return response;
+}
 const getMovieById=async(id)=>{
     const movie=await Movie.findById(id);
     if(!movie){
@@ -11,4 +18,4 @@ const getMovieById=async(id)=>{
     }
     return movie;
 }
-module.exports={getMovieById};
+module.exports={getMovieById,createMovie,deleteMovie};

@@ -2,59 +2,31 @@ const Movie=require("../models/movie.model")
 
 const movieService=require("../services/movie.service");
 
-const errorResponseBody={
-    err:{},
-    data:{},
-    message:"Something went wrong,cannot process the request",
-    success:false
-}
-const successResponseBody={
-    err:{},
-    data:{},
-    message:"Successfully processes the request",
-    success:true
-    
-}
+const {errorResponseBody,successResponseBody}=require("../utils/responseBody")
 const createMovie=async(req,res)=>{
     try{
-        const movie=await Movie.create(req.body);
-        res.status(201).json({
-            success:true,
-            error:{},
-            data:movie,
-            message:"Successfully created a movie"
-        })
+        const movie=await movieService.createMovie(req.body);
+        successResponseBody.data=movie;
+        successResponseBody.message="Successfully created the movie"
+        res.status(201).json(successResponseBody)
     }
     catch(err){
         console.log(err);
-         res.status(500).json({
-           success: false,
-           error: err,
-           data: {},
-           message: "Something went wrong",
-         });
+        errorResponseBody.error=err;
+         res.status(500).json(errorResponseBody);
     }
 }
 const deleteMovie=async(req,res)=>{
     try{
-        const response=await Movie.deleteOne({
-            _id:req.params.id
-        });
-        return res.status(200).json({
-            success:true,
-            error:{},
-            "message":"Successfully deleted the movie",
-            "data":response
-        });
+        const response=await movieService.deleteMovie(req.params.id);
+        successResponseBody.message="Successfully deleted the movie";
+        successResponseBody.data=response;
+        return res.status(200).json(successResponseBody);
     }
     catch(err){
-        console.log(err);
-        return res.status(500).json({
-            success:false,
-            error:err,
-            message:"Something went wrong",
-            data:{}
-       })
+       console.log(err);
+       errorResponseBody.error = err;
+       res.status(500).json(errorResponseBody);
     }
 }
 const getMovie=async(req,res)=>{
