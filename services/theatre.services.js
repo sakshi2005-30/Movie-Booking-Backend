@@ -17,4 +17,37 @@ const createTheatre=async(data)=>{
         throw error;
     }
 }
-module.exports={createTheatre};
+const deleteTheatre=async(id)=>{
+    try{
+        const response=await Theatre.findByIdAndDelete(id);
+        if(!response){
+            return {
+                err:"No record of a theatre fouund for the particluar id",
+                err:404
+            }
+        }
+        return response;
+    }
+    catch(error){
+        console.log(error);
+        throw error;
+    }
+}
+const getTheatre=async(id)=>{
+    try{
+        const response=await Theatre.findById(id);
+        if(!response){
+            return {
+                err:"No theatre found with this id",
+                code:404
+              
+            }
+        }
+          return response;
+    }
+    catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+module.exports={createTheatre,deleteTheatre,getTheatre};

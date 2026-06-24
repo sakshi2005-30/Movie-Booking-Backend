@@ -15,7 +15,35 @@ const create=async(req,res)=>{
     }
     catch(err){
         errorResponseBody.err=err;
-        return res.stautus(500).json(errorResponseBody);
+        return res.status(500).json(errorResponseBody);
     }
 }
-module.exports={create};
+const destroy=async(req,res)=>{
+    try {
+        const response=await theatreService.deleteTheatre(req.params.id);
+        if(response.err){
+            errorResponseBody.err=response.err;
+            return res.status(response.code).json(errorResponseBody);
+        }
+        successResponseBody.data=response;
+        return res.status(200).json(successResponseBody)
+    } catch (err) {
+      errorResponseBody.err = err;
+      return res.status(500).json(errorResponseBody);
+    }
+}
+const getTheatre=async(req,res)=>{
+    try {
+      const response = await theatreService.getTheatre(req.params.id);
+      if (response.err) {
+        errorResponseBody.err = response.err;
+        return res.status(response.code).json(errorResponseBody);
+      }
+      successResponseBody.data = response;
+      return res.status(200).json(successResponseBody);
+    } catch (err) {
+      errorResponseBody.err = err;
+      return res.status(500).json(errorResponseBody);
+    }
+}
+module.exports={create,destroy,getTheatre};
