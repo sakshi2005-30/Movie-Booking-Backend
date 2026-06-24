@@ -24,8 +24,21 @@ const createMovie=async(data)=>{
    
 }
 const deleteMovie=async(id)=>{
-    const response=await Movie.findByIdAndDelete(id);
-    return response;
+    try{
+         const response = await Movie.findByIdAndDelete(id);
+         if(!response){
+            return {
+                err:"No movie found with this particular id",
+                code:422
+            }
+         }
+         return response;
+    }
+    catch(err){
+        console.log(err);
+        throw err;
+    }
+   
 }
 const getMovieById=async(id)=>{
     const movie=await Movie.findById(id);
