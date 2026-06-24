@@ -4,9 +4,10 @@ const dotenv=require("dotenv");
 dotenv.config();
 const mongoose=require("mongoose");
 const movieRoutes=require("./routes/movie.routes")
+const theatreRoutes=require("./routes/theatre.routes")
 app.use(express.json());
 movieRoutes(app);
-
+theatreRoutes(app);
 
 const PORT=process.env.PORT;
 app.listen(PORT,async()=>{
