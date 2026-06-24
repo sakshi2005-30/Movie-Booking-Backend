@@ -46,4 +46,14 @@ const getTheatre=async(req,res)=>{
       return res.status(500).json(errorResponseBody);
     }
 }
-module.exports={create,destroy,getTheatre};
+const getTheatres=async(req,res)=>{
+    try {
+        const response=await theatreService.getAllTheatres();
+        successResponseBody.data=response;
+        return res.status(200).json(successResponseBody);
+    } catch (err) {
+      errorResponseBody.err = err;
+      return res.status(500).json(errorResponseBody);
+    }
+}
+module.exports={create,destroy,getTheatre,getTheatres};

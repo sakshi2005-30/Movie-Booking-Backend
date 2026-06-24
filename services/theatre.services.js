@@ -50,4 +50,14 @@ const getTheatre=async(id)=>{
         throw err;
     }
 }
-module.exports={createTheatre,deleteTheatre,getTheatre};
+const getAllTheatres=async()=>{
+    try{
+        const response=await Theatre.find({});
+        return response;
+    }
+    catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+module.exports={createTheatre,deleteTheatre,getTheatre,getTheatre,getAllTheatres};
