@@ -60,4 +60,33 @@ const getAllTheatres=async()=>{
         throw err;
     }
 }
-module.exports={createTheatre,deleteTheatre,getTheatre,getTheatre,getAllTheatres};
+const updateMoviesInTheatre=async(theatreId,movieIds,insert)=>{
+    try{
+        const theatre=await Theatre.findById(theatreId);
+        if(!theatre){
+            return {
+                err:"No such theatre found for the id provided",
+                code:404
+            }
+        }
+        if(insert){
+            //add movie ids to the tehatre
+            movieIds.forEach((movieId)=>{
+                theatre.movies.push(movieId);
+            })
+        }
+        else{
+            //delete movie ids from theatre
+           theatre.movies = theatre.movies.filter(
+             (smi) => !movieIds.includes(smi.toString()),
+           );
+        }
+        await theatre.save();
+        return theatre;
+    }
+    catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+module.exports={createTheatre,deleteTheatre,getTheatre,getTheatre,getAllTheatres,updateMoviesInTheatre};
