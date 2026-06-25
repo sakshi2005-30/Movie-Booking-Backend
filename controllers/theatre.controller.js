@@ -48,7 +48,7 @@ const getTheatre=async(req,res)=>{
 }
 const getTheatres=async(req,res)=>{
     try {
-        const response=await theatreService.getAllTheatres();
+        const response=await theatreService.getAllTheatres(req.query);
         successResponseBody.data=response;
         return res.status(200).json(successResponseBody);
     } catch (err) {
