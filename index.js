@@ -6,6 +6,7 @@ const mongoose=require("mongoose");
 const movieRoutes=require("./routes/movie.routes")
 const theatreRoutes=require("./routes/theatre.routes")
 app.use(express.json());
+mongoose.set("debug",true);
 movieRoutes(app);
 theatreRoutes(app);
 

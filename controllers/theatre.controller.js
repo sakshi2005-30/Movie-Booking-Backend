@@ -48,7 +48,7 @@ const getTheatre=async(req,res)=>{
 }
 const getTheatres=async(req,res)=>{
     try {
-        const response=await theatreService.getAllTheatres();
+        const response=await theatreService.getAllTheatres(req.query);
         successResponseBody.data=response;
         return res.status(200).json(successResponseBody);
     } catch (err) {
@@ -56,4 +56,56 @@ const getTheatres=async(req,res)=>{
       return res.status(500).json(errorResponseBody);
     }
 }
-module.exports={create,destroy,getTheatre,getTheatres};
+const updateMovies=async(req,res)=>{
+    try {
+        const response=await theatreService.updateMoviesInTheatre(req.params.id,req.body.movieIds,req.body.insert);
+      
+        if(response.err){
+            errorResponseBody.err=response.err;
+            return res.status(response.code).json(errorResponseBody);
+        }
+        successResponseBody.data=response;
+        successResponseBody.message="Successfuly updated the movies in the theatre";
+        return res.status(200).json(successResponseBody);
+    } catch (err) {
+      errorResponseBody.err = err;
+      return res.status(500).json(errorResponseBody);
+    }
+}
+const updateTheatre=async(req,res)=>{
+    try{
+         const response = await theatreService.updateTheatre(
+           req.params.id,
+           req.body,
+         );
+       
+         if (response.err) {
+           errorResponseBody.err = response.err;
+           return res.status(response.err).json(errorResponseBody);
+         }
+        successResponseBody.message="Successfully updated the theatre";
+        successResponseBody.data=response;
+        return res.status(200).json(successResponseBody);
+    }
+    catch(err){
+         errorResponseBody.err = err;
+         return res.status(500).json(errorResponseBody);
+    }
+   
+}
+const getMovies=async(req,res)=>{
+    try {
+        const response=await theatreService.getMoviesInTheatre(req.params.id);
+        if(response.err){
+
+            errorResponseBody.message=response.err;
+            return res.status(response.code).json(errorResponseBody);
+        }
+        successResponseBody.data=response;
+        return res.status(200).json(successResponseBody);
+    } catch (err) {
+      errorResponseBody.err = err;
+      return res.status(500).json(errorResponseBody);
+    }
+}
+module.exports={create,destroy,getTheatre,getTheatres,updateMovies,updateTheatre,getMovies};

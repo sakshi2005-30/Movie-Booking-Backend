@@ -18,4 +18,27 @@ const validateTheatreCreateRequest=async(req,res,next)=>{
     }
     next();
 }
-module.exports={validateTheatreCreateRequest};
+const validateUpdateMovies=async(req,res,next)=>{
+  //validate insert
+  if(req.body.insert==undefined){
+    errorResponseBody.message="The insert parameter is missing in the request";
+    return res.status(400).json(errorResponseBody);
+  }
+  //validate movieIdds
+  if(!req.body.movieIds){
+    errorResponseBody.message="No movies present in the request to be updated in the theatre";
+   return res.status(400).json(errorResponseBody);
+  }
+  //validte array
+  if(!(req.body.movieIds instanceof Array)){
+    errorResponseBody.message="Expected an array but found something else";
+    return res.status(400).json(errorResponseBody);
+  }
+  if (req.body.movieIds.length<=0 ){
+    errorResponseBody.message = "No movies present to be updated in the theatre";
+    return res.status(400).json(errorResponseBody);
+  }
+  next();
+}
+
+module.exports={validateTheatreCreateRequest,validateUpdateMovies};
