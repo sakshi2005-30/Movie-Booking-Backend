@@ -150,4 +150,21 @@ const updateTheatre=async(id,data)=>{
         }
     }
 }
-module.exports={createTheatre,deleteTheatre,getTheatre,getTheatre,getAllTheatres,updateMoviesInTheatre,updateTheatre};
+const getMoviesInTheatre=async(id)=>{
+    try{
+        console.log("id:",id);
+        const theatre=await Theatre.findById(id,{name:1,movies:1,address:1}).populate("movies");
+        if(!theatre){
+            return {
+                err:"No theatre found with this particular id",
+                code:404
+            }
+        }
+        return theatre;
+    }
+    catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+module.exports={createTheatre,deleteTheatre,getTheatre,getTheatre,getAllTheatres,updateMoviesInTheatre,updateTheatre,getMoviesInTheatre};
