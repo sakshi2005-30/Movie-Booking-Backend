@@ -53,6 +53,7 @@ const getTheatre=async(id)=>{
 const getAllTheatres=async(data)=>{
     try{
         let query={};
+        let pagination={};
         if(data && data.city){
             query.city=data.city;
         }
@@ -62,8 +63,18 @@ const getAllTheatres=async(data)=>{
         if(data && data.name){
             query.name=data.name
         }
+        if(data && data.limit){
+            //this represents how many theatres on a singkle page shown
+            pagination.limit=data.limit
+        }
+        if(data && data.skip){
+            //how many records we want to skip
+            //skiping also depends on which page we are
+            let perPage=(data.limit)?data.limit :3;
+            pagination.skip=data.skip*perPage;
+        }
        
-        const response=await Theatre.find(query);
+        const response=await Theatre.find(query,{},pagination);
         return response;
     }
     catch(err){
