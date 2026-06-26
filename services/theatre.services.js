@@ -111,4 +111,30 @@ const updateMoviesInTheatre=async(theatreId,movieIds,insert)=>{
         throw err;
     }
 }
-module.exports={createTheatre,deleteTheatre,getTheatre,getTheatre,getAllTheatres,updateMoviesInTheatre};
+const updateTheatre=async(id,data)=>{
+    try{
+        const response = await Theatre.findByIdAndUpdate(
+          id,
+          data,
+          { new: true, runValidators: true },
+        );
+
+        if(!response){
+            return {
+                err:"No theatre present with this particular id",
+                code:404
+            }
+        }
+        return response;
+    }
+    catch(error){
+        if(error.name==="ValidationError"){
+            let err={};
+            Object.keys(error.errors).forEach((key)=>{
+                err[key]=error.errors[key].message
+            })
+            return {err:err,code:442};
+        }
+    }
+}
+module.exports={createTheatre,deleteTheatre,getTheatre,getTheatre,getAllTheatres,updateMoviesInTheatre,updateTheatre};
