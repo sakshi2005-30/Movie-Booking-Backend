@@ -1,5 +1,5 @@
 const Theatre=require("../models/theatre.model");
-const {}=require('../utils/responseBody')
+const Movie=require("../models/movie.model")
 const createTheatre=async(data)=>{
     try{
         const response=await Theatre.create(data);
@@ -63,6 +63,13 @@ const getAllTheatres=async(data)=>{
         if(data && data.name){
             query.name=data.name
         }
+       // 6a368128e838cf5329a6a504
+         
+        if(data && data.movieId){
+      
+           
+            query.movies={$all:data.movieId}
+        }
         if(data && data.limit){
             //this represents how many theatres on a singkle page shown
             pagination.limit=data.limit
@@ -74,6 +81,7 @@ const getAllTheatres=async(data)=>{
             pagination.skip=data.skip*perPage;
         }
        
+       
         const response=await Theatre.find(query,{},pagination);
         return response;
     }
@@ -84,28 +92,31 @@ const getAllTheatres=async(data)=>{
 }
 const updateMoviesInTheatre=async(theatreId,movieIds,insert)=>{
     try{
+        let theatre;
        if(insert){
         //add movies to theatre
-        await Theatre.updateOne(
-            {_id:theatreId},
-            {$addToSet:{movies:{$each:movieIds}}}
+       theatre= await Theatre.findByIdAndUpdate(
+          { _id: theatreId },
+          { $addToSet: { movies: { $each: movieIds } } },
+          { new: true },
         );
        }
        else{
         //remove movies from theatre
-        await Theatre.updateOne(
-            {_id:theatreId},
-            {$pull:{movies:{$in:movieIds}}}
-        )
+        theatre = await Theatre.findByIdAndUpdate(
+          { _id: theatreId },
+          { $pull: { movies: { $in: movieIds } } },
+          { new: true },
+        );
        }
-       const theatre=await Theatre.findById(theatreId);
+      
        if(!theatre){
         return {
             err:"No theatre found with this id",
             code:404
         }
        }
-       await theatre.save();
+   
        return theatre.populate("movies");
     }
     catch(err){
