@@ -1,6 +1,17 @@
 const User=require("../models/user.model");
+const {USER_STATUS,USER_TYPE}=require("../utils/constants");
 const createUser=async(data)=>{
     try{
+
+        if(data.type)
+        if (!data.userType || data.userType ===USER_TYPE.customer) {
+          if (data.userStatus && data.userStatus !== USER_STATUS.approved) {
+            throw { err: "We cannot set any other status", code: 404 };
+          }
+        }
+        if(data.userType && data.userType!=USER_TYPE.customer){
+            data.userStatus=USER_STATUS.pending;
+        }
         const response=await User.create(data);
         return response;
     }
@@ -12,8 +23,8 @@ const createUser=async(data)=>{
             })
             throw {err:err,code:422};
         }
-        console.log(err);
-        throw err;
+        console.log(error);
+        throw error;
     }
 }
 module.exports={createUser};
