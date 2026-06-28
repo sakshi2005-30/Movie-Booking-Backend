@@ -7,9 +7,13 @@ const signup=async(req,res)=>{
         successResponseBody.message="Successfully registered a user";
         return res.status(201).json(successResponseBody);
     }
-    catch(err){
-        console.log(err);
-        errorResponseBody.err=err;
+    catch(error){
+        console.log(error);
+        if(error.err){
+            errorResponseBody.err=error.err;
+            return res.status(error.code).json(errorResponseBody);
+        }
+        errorResponseBody.error=error;
         return res.status(500).json(errorResponseBody)
     }
 }

@@ -4,7 +4,14 @@ const createUser=async(data)=>{
         const response=await User.create(data);
         return response;
     }
-    catch(err){
+    catch(error){
+        if(error.name==="ValidationError"){
+            let err={};
+            Object.keys(error.errors).forEach((key)=>{
+                err[key]=error.errors[key].message;
+            })
+            throw {err:err,code:422};
+        }
         console.log(err);
         throw err;
     }
