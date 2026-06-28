@@ -27,4 +27,17 @@ const createUser=async(data)=>{
         throw error;
     }
 }
-module.exports={createUser};
+const getUserEmail=async(email)=>{
+    try{
+        const response=await User.findOne({email:email});
+        if(!response){
+            throw {err:"No user present with this email",code:404};
+        }
+        return response;
+    }
+    catch(error){
+        console.log(err);
+        throw err;
+    }
+}
+module.exports={createUser,getUserEmail};
