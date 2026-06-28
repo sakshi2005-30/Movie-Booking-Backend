@@ -7,7 +7,7 @@ const movieRoutes=require("./routes/movie.routes")
 const theatreRoutes=require("./routes/theatre.routes")
 const authRoutes=require("./routes/auth.routes")
 app.use(express.json());
-mongoose.set("debug",true);
+//mongoose.set("debug",true);
 movieRoutes(app);
 theatreRoutes(app);
 authRoutes(app);
