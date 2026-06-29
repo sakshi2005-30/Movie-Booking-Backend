@@ -14,5 +14,21 @@ const validateAuthRequest=async(req,res,next)=>{
     }
     next();
 }
+const validateSigninRequest=async(req,res)=>{
+   
+        //validate email
+        if(!req.body.email){
+            errorResponseBody.err="No email provided"
+            return res.status(400).json(errorResponseBody);
+        }
 
-module.exports={validateAuthRequest}
+        //validate password
+        if(!req.body.password){
+            errorResponseBody.err="No password provided for signin";
+            return res.status(400).json(errorResponseBody)
+        }
+        next();
+    
+}
+
+module.exports={validateAuthRequest,validateSigninRequest}
