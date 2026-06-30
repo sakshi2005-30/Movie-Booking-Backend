@@ -1,5 +1,6 @@
 const User=require("../models/user.model");
 const {USER_STATUS,USER_TYPE}=require("../utils/constants");
+const { errorResponseBody } = require("../utils/responseBody");
 const createUser=async(data)=>{
     try{
 
@@ -40,4 +41,19 @@ const getUserEmail=async(email)=>{
         throw err;
     }
 }
-module.exports={createUser,getUserEmail};
+const getUserById=async(id)=>{
+    try{
+       
+        const user=await User.findById(id);
+        if(!user){
+            throw {err:"No user found with the given id",code:404};
+
+        }
+        return user;
+    }
+    catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+module.exports={createUser,getUserEmail,getUserById};

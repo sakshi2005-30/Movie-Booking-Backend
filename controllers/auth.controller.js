@@ -1,6 +1,7 @@
 const userService=require("../services/user.service");
 const {errorResponseBody,successResponseBody}=require("../utils/responseBody");
 const jwt=require("jsonwebtoken")
+
 const signup=async(req,res)=>{
     try{
         const response=await userService.createUser(req.body);
@@ -50,4 +51,30 @@ const signin=async(req,res)=>{
         res.status(500).json(errorResponseBody)
     }
 }
-module.exports={signup,signin};
+const resetPassword=async(req,res)=>{
+    try{
+
+        const user=await userService.getUserById(req.user);
+        console.log("user:",user);
+       const isOldPasswordCorrect=await user.isValidPassword(req.body.oldPassword);
+       if(!isOldPasswordCorrect){
+        throw {err:"Invalid old password,please write the correct old password",code:403};
+       
+       }
+        user.password = req.body.newPassword;
+        await user.save();
+        successResponseBody.data = user;
+        successResponseBody.message = "Successfully reset the password";
+        return res.status(200).json(successResponseBody);
+    }
+    catch(error){
+        if(error.err){
+            errorResponseBody.err=error.err;
+            return res.status(error.code).json(errorResponseBody)
+        }
+        console.log(error);
+        errorResponseBody.err=error;
+        return res.status(500).json(errorResponseBody)
+    }
+}
+module.exports={signup,signin,resetPassword};
