@@ -167,4 +167,20 @@ const getMoviesInTheatre=async(id)=>{
         throw err;
     }
 }
-module.exports={createTheatre,deleteTheatre,getTheatre,getTheatre,getAllTheatres,updateMoviesInTheatre,updateTheatre,getMoviesInTheatre};
+const checkMovieInATheatre=async(theatreId,movieId)=>{
+    try{
+        const theatre=await Theatre.findById(theatreId);
+        console.log("id:",theatreId,movieId);
+        if(!theatre){
+            return {err:"No theatre presnt with this id",code:404};
+
+        }
+        console.log("index:", theatre.movies.indexOf(movieId));
+        return theatre.movies.indexOf(movieId)!==-1;
+    }
+    catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+module.exports={createTheatre,deleteTheatre,getTheatre,getTheatre,getAllTheatres,updateMoviesInTheatre,updateTheatre,getMoviesInTheatre,checkMovieInATheatre};

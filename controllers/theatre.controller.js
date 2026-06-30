@@ -108,4 +108,19 @@ const getMovies=async(req,res)=>{
       return res.status(500).json(errorResponseBody);
     }
 }
-module.exports={create,destroy,getTheatre,getTheatres,updateMovies,updateTheatre,getMovies};
+const checkMovie=async(req,res)=>{
+    try{
+        const response=await theatreService.checkMovieInATheatre(req.params.theatreId,req.params.movieId);
+        if(response.err){
+            errorResponseBody.message=response.message;
+            return res.status(response.code).json(errorResponseBody);
+        }
+        successResponseBody.data=response;
+        return res.status(200).json(successResponseBody);
+    }
+    catch(err){
+         errorResponseBody.err = err;
+         return res.status(500).json(errorResponseBody);
+    }
+}
+module.exports={create,destroy,getTheatre,getTheatres,updateMovies,updateTheatre,getMovies,checkMovie};
