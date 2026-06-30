@@ -1,21 +1,22 @@
 const theatreService=require("../services/theatre.services");
 const {errorResponseBody,successResponseBody}=require("../utils/responseBody")
+const {STATUS}=require("../utils/constants");
 const create=async(req,res)=>{
     try{
         const response=await theatreService.createTheatre(req.body);
-        if(response.err){
-            errorResponseBody.err=response.err;
-            errorResponseBody.message="Validation failed on few paramters";
-            res.status(response.code).json(errorResponseBody);
-        }
+       
         successResponseBody.data=response;
         successResponseBody.message="Successfully created the theatre";
-        return res.status(201).json(successResponseBody);
+        return res.status(STATUS.CREATED).json(successResponseBody);
 
     }
     catch(err){
+        if(err.err){
+            errorResponseBody.err=err.err;
+            return res.status(error.code).json(errorResponseBody)
+        }
         errorResponseBody.err=err;
-        return res.status(500).json(errorResponseBody);
+        return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
     }
 }
 const destroy=async(req,res)=>{
