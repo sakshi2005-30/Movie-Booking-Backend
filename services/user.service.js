@@ -56,4 +56,31 @@ const getUserById=async(id)=>{
         throw err;
     }
 }
-module.exports={createUser,getUserEmail,getUserById};
+const updateUserRoleORUserStatus=async(data,userId)=>{
+    try{
+        const updateQuery={};
+        console.log("id:",userId)
+        
+        if(data && data.userType)updateQuery.userType=data.userType;
+        if(data && data.userStatus)updateQuery.userStatus=data.userStatus;
+
+        const response=await User.findOneAndUpdate({_id:userId},updateQuery,{new:true,runValidators:true});
+        if(!response){
+            throw {err:"No user found with this id",code:404};
+
+        }
+        return response;
+    }
+    catch(error){
+        if(error.name==="ValidationError"){
+            let err={};
+            Object.keys(error.errors).forEach((key)=>{
+                err[key]=error.errors[key].message;
+            })
+            throw {err:err,code:400};
+        }
+        console.log(error);
+        throw error;
+    }
+}
+module.exports={createUser,getUserEmail,getUserById,updateUserRoleORUserStatus};

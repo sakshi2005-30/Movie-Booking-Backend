@@ -48,7 +48,7 @@ const isAuthenticated=async(req,res,next)=>{
         }
         const user=await userService.getUserById(response.id);
         req.user=user.id
-        console.log("req.user:",req.user);
+     
         next();
     }
     catch(err){

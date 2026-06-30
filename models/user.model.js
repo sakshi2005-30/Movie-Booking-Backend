@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema(
       required: true,
       enum: {
         values: [USER_STATUS.approved, USER_STATUS.pending, USER_STATUS.rejected],
-        message: "Invalid user type",
+        message: "Invalid status type",
       },
       default: USER_STATUS.approved
     },

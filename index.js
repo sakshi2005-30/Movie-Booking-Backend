@@ -6,12 +6,13 @@ const mongoose=require("mongoose");
 const movieRoutes=require("./routes/movie.routes")
 const theatreRoutes=require("./routes/theatre.routes")
 const authRoutes=require("./routes/auth.routes")
+const userRoutes=require("./routes/user.routes");
 app.use(express.json());
 //mongoose.set("debug",true);
 movieRoutes(app);
 theatreRoutes(app);
 authRoutes(app);
-
+userRoutes(app);
 const PORT=process.env.PORT;
 app.listen(PORT,async()=>{
     console.log(`Server is running at http://localhost:${PORT}`);
