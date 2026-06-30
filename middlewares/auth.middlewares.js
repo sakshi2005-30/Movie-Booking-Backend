@@ -1,6 +1,7 @@
 const {errorResponseBody}=require("../utils/responseBody")
 const jwt=require("jsonwebtoken");
-const userService=require("../services/user.service")
+const userService=require("../services/user.service");
+const {USER_TYPE}=require("../utils/constants")
 const validateAuthRequest=async(req,res,next)=>{
     if(!req.body.name){
         errorResponseBody.err="Name of the user not present in the request";
@@ -73,4 +74,30 @@ const validateResetPasswordMiddleware=async(req,res,next)=>{
     }
     next();
 }
-module.exports={validateAuthRequest,validateSigninRequest,isAuthenticated,validateResetPasswordMiddleware}
+const isAdmin=async(req,res,next)=>{
+    const user=await userService.getUserById(req.user);
+    if(user.userType!==USER_TYPE.admin){
+        errorResponseBody.err="User is not an admin,cannot procces with the request";
+        return res.status(401).json(errorResponseBody);
+        
+    }
+    next();
+}
+const isClient = async (req, res, next) => {
+  const user = await userService.getUserById(req.user);
+  if (user.userType !== USER_TYPE.client) {
+    errorResponseBody.err =
+      "User is not an client,cannot procces with the request";
+    return res.status(401).json(errorResponseBody);
+  }
+  next();
+};
+const isAdminOrClient=async(req,res,next)=>{
+    const user=await userService.getUserById(req.user);
+    if(user.userType!==USER_TYPE.admin ||  user.userType!==USER_TYPE.client){
+        errorResponseBody.err="User is neither an admin nor a client,so can't process with the request";
+        return res.status(401).json(errorResponseBody)
+    }
+
+}
+module.exports={validateAuthRequest,validateSigninRequest,isAuthenticated,validateResetPasswordMiddleware,isAdmin,isClient,isAdminOrClient}
