@@ -61,4 +61,16 @@ const isAuthenticated=async(req,res,next)=>{
     }
     
 }
-module.exports={validateAuthRequest,validateSigninRequest,isAuthenticated}
+const validateResetPasswordMiddleware=async(req,res,next)=>{
+    if(!req.body.oldPassword){
+        errorResponseBody.err = "Missing the old Password";
+        return res.status(400).json(errorResponseBody);
+    }
+    if(!req.body.newPassword){
+        errorResponseBody.err="Missing the new Password "
+        return res.status(400).json(errorResponseBody);
+
+    }
+    next();
+}
+module.exports={validateAuthRequest,validateSigninRequest,isAuthenticated,validateResetPasswordMiddleware}
