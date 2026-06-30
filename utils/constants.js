@@ -23,4 +23,9 @@ const BOOKING_STATUS={
     successfull:"SUCCESSFULL",
     processing:"IN_PROCESS"
 }
-module.exports={USER_STATUS,USER_TYPE,STATUS,BOOKING_STATUS}
+const PAYMENT_STATUS={
+    success:"SUCCESS",
+    failed:"FAILED",
+    pending:"PENDING"
+}
+module.exports={USER_STATUS,USER_TYPE,STATUS,BOOKING_STATUS,PAYMENT_STATUS}
