@@ -1,5 +1,6 @@
 const Theatre=require("../models/theatre.model");
 const Movie=require("../models/movie.model")
+const {STATUS}=require("../utils/constants")
 const createTheatre=async(data)=>{
     try{
         const response=await Theatre.create(data);
@@ -11,7 +12,7 @@ const createTheatre=async(data)=>{
             Object.keys(error.errors).forEach((key)=>{
                 err[key]=error.errors[key].message;
             })
-            return {err:err,code:422};
+           throw {err:err,code:STATUS.UNPROCESSABLE_ENTITY};
         }
        console.log(error);
         throw error;
@@ -21,9 +22,9 @@ const deleteTheatre=async(id)=>{
     try{
         const response=await Theatre.findByIdAndDelete(id);
         if(!response){
-            return {
+          throw{
                 err:"No record of a theatre fouund for the particluar id",
-                err:404
+                code:STATUS.NOT_FOUND
             }
         }
         return response;
