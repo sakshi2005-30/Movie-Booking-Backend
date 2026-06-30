@@ -18,4 +18,9 @@ const STATUS={
     FORBIDDEN:403,
     UNPROCESSABLE_ENTITY:422
 }
-module.exports={USER_STATUS,USER_TYPE,STATUS}
+const BOOKING_STATUS={
+    cancelled:"CANCELLED",
+    successfull:"SUCCESSFULL",
+    processing:"IN_PROCESS"
+}
+module.exports={USER_STATUS,USER_TYPE,STATUS,BOOKING_STATUS}

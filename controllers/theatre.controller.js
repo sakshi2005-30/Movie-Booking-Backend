@@ -52,10 +52,10 @@ const getTheatres=async(req,res)=>{
     try {
         const response=await theatreService.getAllTheatres(req.query);
         successResponseBody.data=response;
-        return res.status(200).json(successResponseBody);
+        return res.status(STATUS.CREATED).json(successResponseBody);
     } catch (err) {
       errorResponseBody.err = err;
-      return res.status(500).json(errorResponseBody);
+      return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
     }
 }
 const updateMovies=async(req,res)=>{
