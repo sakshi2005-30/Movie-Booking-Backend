@@ -22,15 +22,16 @@ const create=async(req,res)=>{
 const destroy=async(req,res)=>{
     try {
         const response=await theatreService.deleteTheatre(req.params.id);
-        if(response.err){
-            errorResponseBody.err=response.err;
-            return res.status(response.code).json(errorResponseBody);
-        }
+      
         successResponseBody.data=response;
-        return res.status(200).json(successResponseBody)
+        return res.status(STATUS.CREATED).json(successResponseBody)
     } catch (err) {
+        if(err.err){
+            errorResponseBody.err=err.err;
+            return res.status(err.code).json(errorResponseBody);
+        }
       errorResponseBody.err = err;
-      return res.status(500).json(errorResponseBody);
+      return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
     }
 }
 const getTheatre=async(req,res)=>{

@@ -22,9 +22,9 @@ const deleteTheatre=async(id)=>{
     try{
         const response=await Theatre.findByIdAndDelete(id);
         if(!response){
-            return {
+          throw{
                 err:"No record of a theatre fouund for the particluar id",
-                err:404
+                code:STATUS.NOT_FOUND
             }
         }
         return response;
