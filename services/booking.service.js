@@ -39,4 +39,42 @@ const updateBooking=async(data,id)=>{
         throw error;
     }
 }
-module.exports={createBooking,updateBooking}
+const getBookings=async(data)=>{
+    try{
+         const response = await Booking.find({ userId: data.userId });
+         console.log("res:",response)
+         return response;
+    }
+    catch(error){
+        console.log(error);
+        throw error
+    }
+   
+}
+const getAllBookings=async(req,res)=>{
+    try{
+        const response=await Booking.find({});
+        return response;
+    }
+    catch(error){
+         console.log(error);
+         throw error;
+    }
+}
+const getBookingById=async(id,userId)=>{
+    try{
+        const response=await Booking.findById(id);
+        if(!response){
+            throw {err:"No booking present for this id",code:STATUS.NOT_FOUND};
+        }
+        if(userId!=response.userId){
+            throw {err:"No booking present",code:STATUS.UNAUTHORIZED};
+        }
+        return response;
+    }
+    catch(error){
+        console.log(error);
+        throw error;
+    }
+}
+module.exports={createBooking,updateBooking,getAllBookings,getBookings,getBookingById};

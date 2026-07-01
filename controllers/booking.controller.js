@@ -1,5 +1,5 @@
 const {errorResponseBody,successResponseBody}=require("../utils/responseBody")
-const {STATUS}=require("../utils/constants")
+const {STATUS, BOOKING_STATUS}=require("../utils/constants")
 const bookingService=require("../services/booking.service");
 const create=async(req,res)=>{
     try{
@@ -37,4 +37,49 @@ const update=async(req,res)=>{
         return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
     }
 }
-module.exports={create,update}
+const getBookings=async(req,res)=>{
+    try{
+        const response=await bookingService.getBookings({userId:req.user});
+        successResponseBody.err="Successfully got the booking";
+        successResponseBody.data=response;
+        return res.status(STATUS.OK).json(successResponseBody);
+    }
+    catch(error){
+        console.log(error)
+        errorResponseBody.err=error;
+        return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
+    }
+}
+const getAllBookings=async(req,res)=>{
+    try{
+        const response=await bookingService.getAllBookings();
+         successResponseBody.err = "Successfully got the booking";
+         successResponseBody.data = response;
+         return res.status(STATUS.OK).json(successResponseBody);
+        
+    }
+    catch(error){
+        console.log(error);
+         errorResponseBody.err = error;
+         return res
+           .status(STATUS.INTERNAL_SERVER_ERROR)
+           .json(errorResponseBody);
+    }
+}
+const getBookingById=async(req,res)=>{
+    try{
+        const response=await bookingService.getBookingById(req.params.id,req.user);
+        successResponseBody.data=response;
+        successResponseBody.message='Successfully fetched the booking';
+        return res.status(STATUS.OK).json(successResponseBody);
+
+    }
+    catch(error){
+         console.log(error);
+         errorResponseBody.err = error;
+         return res
+           .status(STATUS.INTERNAL_SERVER_ERROR)
+           .json(errorResponseBody);    
+    }
+}
+module.exports={create,update,getBookings,getAllBookings,getBookingById}
