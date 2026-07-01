@@ -1,5 +1,6 @@
 const {errorResponseBody,successResponseBody}=require("../utils/responseBody")
-const {STATUS}=require("../utils/constants");
+const {STATUS,BOOKING_STATUS,USER_STATUS, USER_TYPE}=require("../utils/constants");
+const userService=require("../services/user.service");
 const ObjectId=require("mongoose").Types.ObjectId
 const theatreService=require("../services/theatre.services")
 
@@ -52,4 +53,12 @@ const validateBookingCreateRequest=async(req,res,next)=>{
     }
     next()
 }
-module.exports={validateBookingCreateRequest};
+const canChangeStatus=async(req,res,next)=>{
+    const user=await userService.getUserById(req.user);
+    if(user.userType==USER_TYPE.customer && req.body.status && req.body.status!==BOOKING_STATUS.cancelled){
+        errorResponseBody.err="You are not allowed to change the bookings status";
+        return res.status(STATUS.UNAUTHORIZED).json(errorResponseBody);
+    }
+    next();
+}
+module.exports={validateBookingCreateRequest,canChangeStatus};
