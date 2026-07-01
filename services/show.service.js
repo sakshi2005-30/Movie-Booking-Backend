@@ -28,4 +28,24 @@ const createShow=async(data)=>{
         throw error;
     }
 }
-module.exports={createShow};
+const getShows=async(data)=>{
+    try{
+        const filter={};
+        if(data.theatreId){
+            filter.theatreId=data.theatreId;
+        }
+        if(data.movieId){
+            filter.movieId=data.movieId;
+        }
+        const response=await Show.find(filter);
+        if(!response){
+            throw {err:"No shows found",code:STATUS.NOT_FOUND};
+        }
+        return response;
+    }
+    catch(error){
+         console.log(error);
+         throw error;
+    }
+}
+module.exports={createShow,getShows};
