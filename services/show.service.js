@@ -48,4 +48,30 @@ const getShows=async(data)=>{
          throw error;
     }
 }
-module.exports={createShow,getShows};
+const deleteShow=async(id)=>{
+    try{
+        const response=await Show.findByIdAndDelete(id);
+        if(!response){
+            throw {err:"No show found with this id",code:STATUS.NOT_FOUND};
+        }
+        return response;
+    }
+    catch(error){
+        console.log(error);
+        throw error
+    }
+}
+const updateShow=async(id,data)=>{
+    try{
+        const response=await Show.findByIdAndUpdate(id,data,{new:true,runValidators:true});
+        if(!response){
+            throw {err:"No show found with this id",code:STATUS.NOT_FOUND};
+        }
+        return response;
+    }
+    catch(error){
+        console.log(error);
+        throw error
+    }
+}
+module.exports={createShow,getShows,deleteShow,updateShow};
