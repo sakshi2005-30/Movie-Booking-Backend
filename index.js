@@ -9,6 +9,7 @@ const authRoutes=require("./routes/auth.routes")
 const userRoutes=require("./routes/user.routes");
 const bookingRoutes=require("./routes/booking.routes")
 const showRoutes=require('./routes/show.routes');
+const paymentRoutes=require("./routes/payment.routes");
 app.use(express.json());
 //mongoose.set("debug",true);
 movieRoutes(app);
@@ -17,6 +18,7 @@ authRoutes(app);
 userRoutes(app);
 bookingRoutes(app);
 showRoutes(app);
+paymentRoutes(app);
 const PORT=process.env.PORT;
 app.listen(PORT,async()=>{
     console.log(`Server is running at http://localhost:${PORT}`);
